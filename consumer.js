@@ -1,22 +1,23 @@
 const { Kafka } = require("kafkajs");
 
-// Kafka config
 const kafka = new Kafka({
-  clientId: "logger-consumer",
+  clientId: "notification-service",
   brokers: ["localhost:9092"],
 });
 
-const consumer = kafka.consumer({ groupId: "log-group" });
+const consumer = kafka.consumer({ groupId: "notification-group" });
 
 async function runConsumer() {
   await consumer.connect();
-  await consumer.subscribe({ topic: "logs", fromBeginning: true });
+  console.log("👂 Consumer is listining ...")
 
-  console.log("👂 Consumer listening...");
+  await consumer.subscribe({ topic: "orders", fromBeginning: true });
 
   await consumer.run({
     eachMessage: async ({ message }) => {
-      console.log("📩 Message reçu :", message.value.toString());
+      const order = JSON.parse(message.value.toString());
+      
+      console.log(`📧 Notification: Order ${order.orderId} for ${order.user}`);
     },
   });
 }
