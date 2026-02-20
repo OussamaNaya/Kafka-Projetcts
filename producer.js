@@ -32,4 +32,7 @@ app.post("/order", async (req, res) => {
   res.json({ status: "Order created and sent to Kafka", orderId, user });
 });
 
-app.listen(4000, () => console.log("Order API running on port 4000"));
+
+app.listen(3000, () => {
+  console.log("🚀 Order API running on http://localhost:3000");
+});
